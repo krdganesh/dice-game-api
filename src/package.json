@@ -1,0 +1,42 @@
+{
+  "name": "dice-game-api",
+  "version": "1.0.0",
+  "description": "This is a turn based simple dice game api.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ../src/index.js",
+    "start": "node ../src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krdganesh/dice-game-api.git"
+  },
+  "keywords": [
+    "node.js",
+    "koa2",
+    "redis"
+  ],
+  "author": "Ganesh Karande",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/krdganesh/dice-game-api/issues"
+  },
+  "homepage": "https://github.com/krdganesh/dice-game-api#readme",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015-node5": "^1.2.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "kcors": "^2.2.1",
+    "koa": "^2.5.2",
+    "koa-bodyparser": "^4.2.0",
+    "koa-morgan": "^1.0.1",
+    "koa-multer": "^1.0.2",
+    "koa-router": "^7.2.1",
+    "lodash": "^4.17.4",
+    "moment": "^2.22.2",
+    "moment-range": "^4.0.1",
+    "mongoose": "^4.12.3"
+  }
+}
