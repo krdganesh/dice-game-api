@@ -11,12 +11,12 @@ class Utils {
                 return { err: { message: 'Required key doesnt exist ' + k } };
             }
 
-            if (!Object.keys(v).includes('default')) { // If object (without default)
-                let interRes = validateParams(v, params[k], exact);
-                if (interRes.err) {
-                    return interRes;
-                }
-            } else {
+            // if (!Object.keys(v).includes('default')) { // If object (without default)
+            //     let interRes = this.validateParams(v, params[k], exact);
+            //     if (interRes.err) {
+            //         return interRes;
+            //     }
+            // } else {
                 // If primitive
                 // Check if key exists
                 if (params[k] === undefined) {
@@ -48,6 +48,11 @@ class Utils {
                         }
                         params[k] = v.default;
                     }
+
+                    // Handles length
+                    if (v.length && params[k].length > v.length) {
+                        return { err: { message: `${k} key length doesn't match, length should not be greater than ${v.length}` } };
+                    }
                 } else {
                     // 
                     if (typeof params[k] === 'string' && !params[k].length) {
@@ -69,8 +74,12 @@ class Utils {
                         }
                         params[k] = v.default;
                     }
+                    // Handles length
+                    if (v.length && params[k].length > v.length) {
+                        return { err: { message: `${k} key length doesn't match, length should not be greater than ${v.length}` } };
+                    }
                 }
-            }
+            // }
         }
 
         // Returns

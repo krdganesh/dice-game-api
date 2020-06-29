@@ -33,7 +33,7 @@ class User {
 		});
 	}
 
-	updateUser(queryParams, data) {
+	async updateUser(queryParams, data) {
 		if (_.isNull(queryParams) || _.isUndefined(queryParams) || _.isEmpty(queryParams) || _.isNull(data) || _.isUndefined(data) || _.isEmpty(data)) { 
 			return { err: 'queryParams or data can not be empty or null while updating user', result: null };
 		}
@@ -45,7 +45,7 @@ class User {
 		});
 	}
 
-	deleteUser(queryParams) {
+	async deleteUser(queryParams) {
 		if (_.isNull(queryParams) || _.isUndefined(queryParams) || _.isEmpty(queryParams)) { 
 			return { err: 'queryParams or data can not be empty or null while deleting user', result: null };
 		}
@@ -54,6 +54,19 @@ class User {
 			const options = { returnOriginal: false };
 			const { err, result } = await this.db.delete(userSchema.schema, query);
 			return (!_.isNull(err)) ? reject(err) : resolve(result);
+		});
+	}
+
+	async getUserInfo(userIDs){
+		if (_.isNull(userIDs) || _.isUndefined(userIDs) || _.isEmpty(userIDs)) {
+			return { err: 'userIDs can not be empty or null while checking user exists', result: null };
+		}
+		return new Promise(async (resolve, reject) => {
+			let output = { err: null, result: null };
+			const query = { _id: { $in: userIDs } };
+			output = await this.db.findAll(userSchema.schema, query, this.db.excludeFields);
+			const result = (_.isNull(output.result)) ? output.err : output.result;
+			return (!_.isNull(output.err)) ? reject(output.err) : resolve(result);
 		});
 	}
 }

@@ -24,13 +24,7 @@ export default class UserController {
 				overview : {
 					won_count : 0,
 					lost_count : 0,
-				},
-				current_game_details : {
-					game_id_ : null,
-					is_your_turn : false,
-					dice_rolling_count : 0,
-					dice_rolling_outcomes : []
-				},
+				}
 			}
 			ctx.request.body.game_details = game_details;
 			const { err, result } = await utils.invoker(user.saveUser(ctx.request.body));
