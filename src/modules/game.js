@@ -58,7 +58,12 @@ class Game {
 			update["$set"]["game_details." + data.user_id+".sum_of_outcomes"] = data.sum_of_outcomes;
 			update["$set"]["game_details." + data.user_id+".dice_outcomes"] = data.dice_outcomes;
 			update["$set"]["game_details." + data.user_id+".dice_rolling_count"] = data.dice_rolling_count;
-			update["$set"]["game_details." + data.next_user_id+".is_your_turn"] = true;
+			if(!_.isUndefined(data.winning_user_id)){
+				update["$set"]["game_details.status"] = data.status;
+				update["$set"]["game_details.winning_user_id"] = data.winning_user_id;
+			} else {
+				update["$set"]["game_details." + data.next_user_id+".is_your_turn"] = true;
+			}
 
 			const { err, result } = await this.db.update(gameSchema.schema, query, update, options);
 			return (!_.isNull(err)) ? reject(err) : resolve(result);
