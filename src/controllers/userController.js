@@ -20,13 +20,13 @@ export default class UserController {
 	async saveUser(ctx) {
 		const validate = utils.validateParams(UserRules.SAVE, ctx.request.body, false);
 		if (!validate.err) {
-			let game_details = {
-				overview : {
-					won_count : 0,
-					lost_count : 0,
-				}
-			}
-			ctx.request.body.game_details = game_details;
+			// let game_details = {
+			// 	overview : {
+			// 		won_count : 0,
+			// 		lost_count : 0,
+			// 	}
+			// }
+			// ctx.request.body.game_details = game_details;
 			const { err, result } = await utils.invoker(user.saveUser(ctx.request.body));
 			let response = {};
 			if (!_.isNull(err)) {

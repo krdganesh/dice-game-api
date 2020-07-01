@@ -107,6 +107,7 @@ export default class GameController {
 		const validateQuery = utils.validateParams(GameRules.ROLL_DICE_ID, queryParams, false);
 		const validateData = utils.validateParams(GameRules.ROLL_DICE_DATA, data, false);
 		if (!validateQuery.err && !validateData.err) {
+			data.game_id = queryParams.game_id;
 			let response = {};
 			var { err, result } = await utils.invoker(game.getGameInfo(new Array(queryParams.game_id)));
 			if (!_.isNull(err)) {
@@ -146,7 +147,20 @@ export default class GameController {
 				return;
 			}
 
-			data.game_id = queryParams.game_id;
+			var { err, resultLock } = await utils.invoker(game.addDiceRollingLock(data));
+			if (!_.isNull(err)) {
+				let error = {};
+				if (!err.code === 11000) {
+					error = new CustomError('database operation failed', 'dice rolling lock could not be created');
+					response = responseGenerator.generateResponse(error, resultLock, statusCodes.DATABASE_FAILURE);
+					ctx.status = statusCodes.DATABASE_FAILURE.code;
+				} else {
+					error = new CustomError(`multiple simultaneous requests are not allowed for same game_id and user_id, dice could not be rolled.`, 'dice rolling lock could not be inserted');
+					response = responseGenerator.generateResponse(error, null, statusCodes.DATABASE_FAILURE);
+					ctx.status = statusCodes.DATABASE_FAILURE.code;
+				}
+			}
+
 			data.dice_outcome = Math.floor(Math.random() * 6) + 1;
 			data.dice_outcomes = userGameInfo.dice_outcomes;
 			data.dice_outcomes.push(data.dice_outcome);
@@ -194,6 +208,7 @@ export default class GameController {
 					}, autoPlayTimeInMS, data);
 				}
 			}
+			utils.invoker(game.deleteDiceRollingLock(data));
 			ctx.body = response;
 		} else {
 			const error = new CustomError('Validation failed', validateQuery.err, validateData.err);

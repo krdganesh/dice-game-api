@@ -69,6 +69,30 @@ class Game {
 			return (!_.isNull(err)) ? reject(err) : resolve(result);
 		});
 	}
+
+	async addDiceRollingLock(input) {
+		if (_.isNull(input) || _.isUndefined(input) || _.isEmpty(input)) {
+			return { err: 'inpunt can not be empty or null while adding dice rolling lock', result: null };
+		}
+		return new Promise(async (resolve, reject) => {
+			const data = _.cloneDeep(input);
+			data._id = mongoose.Types.ObjectId();
+			const { err, result } = await this.db.insert(gameSchema.schemaDiceRollingLock, data);
+			return (!_.isNull(err)) ? reject(err) : resolve(result);
+		});
+	}
+
+	async deleteDiceRollingLock(queryParams) {
+		if (_.isNull(queryParams) || _.isUndefined(queryParams) || _.isEmpty(queryParams)) { 
+			return { err: 'queryParams or data can not be empty or null while deleting dice rolling lock', result: null };
+		}
+		return new Promise(async (resolve, reject) => {
+			const query = { game_id: queryParams.game_id, user_id : queryParams.user_id };
+			const options = { returnOriginal: false };
+			const { err, result } = await this.db.delete(gameSchema.schemaDiceRollingLock, query);
+			return (!_.isNull(err)) ? reject(err) : resolve(result);
+		});
+	}
 }
 
 export default Game;

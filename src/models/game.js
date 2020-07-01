@@ -9,4 +9,11 @@ const game = new Schema({
     game_details: Object,
 }, { collection: 'games' });
 
+const diceRollingLock = new Schema({
+    _id: { type: String, required: true },
+    game_id: { type: String, required: true },
+    user_id: { type: String, required: true },
+}, { collection: 'dice_rolling_locks' });
+
 module.exports.schema = game;
+module.exports.schemaDiceRollingLock = diceRollingLock;
